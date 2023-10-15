@@ -1,0 +1,52 @@
+import mongoose from "mongoose";
+//import { stringify } from "querystring";
+const scheduleSchema= new mongoose.Schema({
+    providerName:{
+        type:String
+    },
+    flightId:{
+        type:Number
+    },
+    source:{
+        type:String
+    },
+    destination:{
+        type:string
+    },
+    day:{
+        mon:{
+            type:Date,
+            default:null
+        },
+        tue:{
+            type:Date,
+            default:null
+        },
+        wed:{
+            type:Date,
+            default:null
+        },
+        thur:{
+            type:Date,
+            default:null
+        },
+        fri:{
+            type:Date,
+            default:null
+        },
+        sat:{
+            type:Date,
+            default:null
+        },
+        sun:{
+            type:Date,
+            default:null
+        }
+    },
+    capacity:{
+        type:Number
+    },
+    price:{
+        type:Number
+    }
+})
