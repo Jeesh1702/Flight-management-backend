@@ -11,35 +11,35 @@ const scheduleSchema= new mongoose.Schema({
         type:String
     },
     destination:{
-        type:string
+        type:String
     },
     day:{
         mon:{
-            type:Date,
+            type:String,
             default:null
         },
         tue:{
-            type:Date,
+            type:String,
             default:null
         },
         wed:{
-            type:Date,
+            type:String,
             default:null
         },
         thur:{
-            type:Date,
+            type:String,
             default:null
         },
         fri:{
-            type:Date,
+            type:String,
             default:null
         },
         sat:{
-            type:Date,
+            type:String,
             default:null
         },
         sun:{
-            type:Date,
+            type:String,
             default:null
         }
     },
@@ -50,3 +50,7 @@ const scheduleSchema= new mongoose.Schema({
         type:Number
     }
 })
+
+const Model = mongoose.model('Schedule', scheduleSchema);
+
+export default Model
