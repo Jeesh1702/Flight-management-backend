@@ -16,6 +16,7 @@ export default class ProviderController {
         console.log("Adding flight....")
         const newFlight = {
             providerName: req.body.providerName,
+            flightId: req.body.flightId,
             source: req.body.source,
             destination: req.body.destination,
             day: {
@@ -31,11 +32,28 @@ export default class ProviderController {
             price: req.body.price
         }
         try{
-            const response = await ProviderDAO.addFlights(newFlight,req.body.flightId)
-            console.log(response)
+            const response = await ProviderDAO.addFlights(newFlight)
+            // console.log(response)
             res.json({status : "success"})
         }
         catch(e){
+            res.status(500).json({error: e})
+        }
+    }
+
+    static async apiUpdateFlight(req,res,next){
+        
+    }
+
+    static async apiDeleteFlight(req,res,next){
+        console.log("deleting flight")
+        try{
+            const response = await ProviderDAO.deleteFlight(req.body.flightId,req.query.company)
+            console.log(response)
+            res.json({status: "success"})
+        }   
+        catch(e){
+            console.error(`error deleting flight with id ${flightId} ${e}`)
             res.status(500).json({error: e})
         }
     }

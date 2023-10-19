@@ -9,6 +9,7 @@ export default class FlightsDAO{
         }
         try{
             flights = await conn.db(process.env.AIRPORTS).collection("schedule")
+            console.log("Connected to DB")
         }
         catch(e){
             console.error(`Error in establishing connection to collection schedule ${e}`)
@@ -36,14 +37,22 @@ export default class FlightsDAO{
         }
     }
 
-    static async addFlights(newFlight,flightId){
-        newFlight.flightId = new ObjectId(flightId)
-        console.log(newFlight)
+    static async addFlights(newFlight){
         try{
             const res = await flights.insertOne(newFlight)
         }
         catch(e){
             console.error(`error adding flight to DB ${e}`)
+        }
+    }
+ 
+    static async deleteFlight(flightId,company){
+        try{
+            console.log(flightId,company)
+            return await flights.deleteOne({flightId: flightId, providerName: company})
+        }
+        catch(e){
+            console.error(`error in delete fun ${e}`)
         }
     }
 }

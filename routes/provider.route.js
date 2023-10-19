@@ -7,6 +7,6 @@ router.route("/dashboard")
 .get(ProviderController.apiGetFlights)
 .post(ProviderController.apiAddFlight)
 .put()
-.delete()
+.delete(ProviderController.apiDeleteFlight)
 
 export default router
