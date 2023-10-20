@@ -8,7 +8,7 @@ export default class FlightsDAO{
             return
         }
         try{
-            flights = await conn.db(process.env.AIRPORTS).collection("schedule")
+            flights = await conn.db(process.env.AIRPORTS_DB).collection("schedule")
             console.log("Connected to DB")
         }
         catch(e){

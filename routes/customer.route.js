@@ -1,16 +1,11 @@
 import express from "express"
-
+import CustomerController from "../controller/customer.controller.js"
 const router = express.Router()
 
-//default route for sign in
-router.route("/").get((req,res) => res.send("Sign in/ sign up"))
-router.route("/").post()
-
-//routes for dashboard
 router.route("/dashboard")
-.get((req,res) => res.send("Welcome customer"))
-.post()
+.get(CustomerController.apiFetchTickets)
+.post(CustomerController.apiAddTicket)
 .put()
-.delete()
+.delete(CustomerController.apiDeleteTicket)
 
 export default router

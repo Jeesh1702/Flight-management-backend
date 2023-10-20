@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 const customer=new mongoose.Schema({
     user: {
+        custId: {
+        type: Number,
+        },
         fullName: {
         type: String,
         required: true,
@@ -15,8 +18,12 @@ const customer=new mongoose.Schema({
     },
     bookings:{
         flightId:{
-            type:Number
+            type:Number,
+            required: true
+        },
+        noOfTickets:{
+            type:Number,
+            required: true
         }
     }
-    
 })
