@@ -1,10 +1,10 @@
-import ProviderDAO from "../dao/providerDAO.js"
+import FlightsDAO from "../dao/flightsDAO.js"
 import Schedule from "../models/schedule_model.js"
 
 export default class ProviderController {
     static async apiGetFlights(req,res,next){
         const company = req.query.company
-        const {flightList, totalNumFlights} = await ProviderDAO.getFlights(company)
+        const {flightList, totalNumFlights} = await FlightsDAO.getFlights(company)
         let response = {
             provider: company,
             flights: flightList,
@@ -12,6 +12,7 @@ export default class ProviderController {
         }
         res.json(response)
     }
+    
     static async apiAddFlight(req,res,next){
         console.log("Adding flight....")
         const newFlight = {
@@ -32,7 +33,7 @@ export default class ProviderController {
             price: req.body.price
         }
         try{
-            const response = await ProviderDAO.addFlights(newFlight)
+            const response = await FlightsDAO.addFlights(newFlight)
             // console.log(response)
             res.json({status : "success"})
         }
@@ -48,7 +49,7 @@ export default class ProviderController {
     static async apiDeleteFlight(req,res,next){
         console.log("deleting flight")
         try{
-            const response = await ProviderDAO.deleteFlight(req.body.flightId,req.query.company)
+            const response = await FlightsDAO.deleteFlight(req.body.flightId,req.query.company)
             console.log(response)
             res.json({status: "success"})
         }   

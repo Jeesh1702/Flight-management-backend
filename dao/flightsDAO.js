@@ -8,13 +8,36 @@ export default class FlightsDAO{
             return
         }
         try{
-            flights = await conn.db(process.env.AIRPORTS_DB).collection("schedule")
+            flights = await conn.db(process.env.MONGO_DB).collection("schedule")
             console.log("Connected to DB")
         }
         catch(e){
             console.error(`Error in establishing connection to collection schedule ${e}`)
         }
     }
+
+    static async getFlightBySearch(data){
+        // console.log(data)
+        let cursor
+        try{
+            cursor = await flights.find(data)
+        }
+        catch(e){
+            console.error(`error in fetching flights by search ${e}`)
+            return {flightList: [], totalNumFlights: 0}
+        }
+
+        try{
+            const flightList = await cursor.toArray()
+            const totalNumFlights = await flights.countDocuments(data)
+            return {flightList, totalNumFlights}
+        }
+        catch(e){
+            console.error(`Error in converting the cursor ${e}`)
+            return {flightList: [], totalNumFlights: 0}
+        }
+    }
+
     static async getFlights(company){
         let query = {"providerName": {$eq: company}}
         let cursor

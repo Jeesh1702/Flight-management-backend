@@ -1,10 +1,39 @@
-//console.log("test1")
 import express from "express"
-import connection from "../index.js"
-import md5 from "md5"
-//import { connection } from "mongoose";
+// import md5 from "md5"
 const router = express.Router();
-//const connection = require('../db');
+
+let connection
+
+function injectDB(conn){
+    if(connection){
+        return
+    }
+    else{
+        connection = conn
+        connection.connect((err) => {
+            if (err) {
+              console.error('Error connecting to MySQL:', err);
+            } else {
+              console.log('Connected to MySQL');
+              connection.query("select * from user",(error,results) => {
+                if(error){
+                    connection.query("CREATE TABLE user(ID varchar(20) not null,name varchar(30) not null,password varchar(30) not null,about varchar(100),type varchar(15), email varchar(30));",(error,results) => {
+                        if(error){
+                            console.log("Error in creating table user")
+                        }
+                        else{
+                            console.log("Table created successfully")
+                        }
+                    })
+                }
+                else{
+                    console.log("User table already present",results)
+                }
+            })}
+        });
+    }
+}
+export {injectDB}
 
 router.route('/test').post((req,res)=>{
     console.log( "login test ")
