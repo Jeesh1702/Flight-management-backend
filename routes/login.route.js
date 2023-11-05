@@ -19,26 +19,35 @@ router.route('/test').post((req,res)=>{
     return res.json("hello log")
 })
 
+router.route('/CusId').get((req,res)=>{
+  console.log("customer")
+  //const name
+})
+
 router.route('/register').post(async(req, res) => {
-    //console.log(req)
+    console.log("hellow")
+    console.log(req.body)
     let idtemp=100;
-    connection.query('select count(*) from user',(err,res)=>{
+     connection.query('select count(*) from user',(err,res)=>{
         console.log("counter of user",res[0]['count(*)'])
         idtemp+=res[0]['count(*)']+1
     })
     //const id=idtemp;
     //const =idtemp;
-    console.log(req.query)
-  const { name, password, about, type, email } = req.query;
+    console.log("helo")
+    //console.log(req.query)
+  const { name, password, about, type, email } = req.body;
      connection.query('SELECT * FROM user WHERE email = ?', [email], (error, results) => {
-    if (error) {
-      console.error('Error checking for existing user:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
+      
+    // if (error) {
+    //   console.error('Error checking for existing user:', error);
+    //   return res.status(500).json({ message: 'Internal server error' });
+    // }
 
-    if (results.length > 0) {
-      return res.status(400).json({ message: 'User with this email already exists' });
-    }
+    // if (results.length > 0) {
+    //   return res.status(400).json({ message: 'User with this email already exists' });
+    // }
+    console.log( results)
     console.log(idtemp, name, (password), about, type, email)
     connection.query('INSERT INTO user (ID, name, password, about, type, email) VALUES (?, ?, ?, ?, ?, ?)', [idtemp, name, (password), about, type, email], (err) => {
       if (err) {
@@ -52,11 +61,13 @@ router.route('/register').post(async(req, res) => {
 }); 
 
 router.route('/login').post((req, res) => {
-  const { name, password } = req.query;
+  const { name, password } = req.body;
 
   connection.query('SELECT * FROM user WHERE name = ? AND password = ?', [name, (password)], (error, results) => {
+    console.log(results)
     if (error) {
       console.error('Error checking login credentials:', error);
+
       return res.status(500).json({ message: 'Internal server error' });
     }
 
@@ -66,7 +77,7 @@ router.route('/login').post((req, res) => {
 
     const user = results[0];
     
-
+    //res.body.id=results[0].ID
     res.status(200).json({ message: 'Login successful', user });
   });
 });

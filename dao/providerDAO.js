@@ -16,7 +16,11 @@ export default class FlightsDAO{
         }
     }
     static async getFlights(company){
-        let query = {"providerName": {$eq: company}}
+        let query = {}
+        if(company!="x"){
+            query = {"providerName": {$eq: company}}
+        }
+        
         let cursor
         try{
             cursor = await flights.find(query)
