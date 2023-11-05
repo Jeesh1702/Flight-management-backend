@@ -71,8 +71,9 @@ export default class FlightsDAO{
  
     static async deleteFlight(flightId,company){
         try{
-            console.log(flightId,company)
-            return await flights.deleteOne({flightId: flightId, providerName: company})
+            const fid = new ObjectId(flightId)
+            console.log(fid,company,flightId)
+            return await flights.deleteOne({_id: fid, providerName: company})
         }
         catch(e){
             console.error(`error in delete fun ${e}`)

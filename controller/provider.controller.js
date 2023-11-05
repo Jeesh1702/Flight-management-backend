@@ -34,7 +34,7 @@ export default class ProviderController {
         }
         try{
             const response = await FlightsDAO.addFlights(newFlight)
-            // console.log(response)
+            console.log(response)
             res.json({status : "success"})
         }
         catch(e){
