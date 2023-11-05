@@ -2,13 +2,13 @@ import mongodb from "mongodb"
 const ObjectId = mongodb.ObjectId
 let tickets
 
-export default class CustomerDAO{
+export default class TicketDAO{
     static async injectDB(conn){
         if(tickets){
             return
         }
         try{
-            tickets = await conn.db(process.env.AIRPORTS_DB).collection("tickets")
+            tickets = await conn.db(process.env.MONGO_DB).collection("tickets")
         }
         catch(e){
             console.error(`Error in establishing connection to collection tickets ${e}`)

@@ -1,46 +1,26 @@
 import app from "./server.js"
 import mongodb from "mongodb"
 import dotenv from "dotenv"
-import ProviderDAO from "./dao/providerDAO.js"
-import CustomerDAO from "./dao/customerDAO.js"
-import login from "./routes/login.route.js"
-import mysql from "mysql2"
-import cors from "cors"
-import express from "express"
-//const mysql = require('mysql2');
-
-
-
-
-console.log("hey")
-
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'vendhan',
-  database: 'airport'
-});
-
-connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to MySQL:', err);
-  } else {
-    console.log('Connected to MySQL');
-    
-    // Execute the SELECT database() query
-    
-  }
-});
-
-
+import FlightsDAO from "./dao/flightsDAO.js"
+import TicketsDAO from "./dao/ticketsDAO.js"
+import {injectDB} from "./routes/login.route.js"
+import mysql2 from "mysql2"
 
 
 dotenv.config()
+
+const connection = mysql2.createConnection({
+  host: 'localhost',
+  user: process.env.SQL_USER,
+  password: process.env.SQL_PASS,
+  database: process.env.SQL_DB
+});
+
 const MongoClient = mongodb.MongoClient
 
-const port = process.env.PORT || 8000
+const port = process.env.MONGO_PORT || 8000
 MongoClient.connect(
-    process.env.AIRPORTS_DB_URI,
+    process.env.MONGO_DB_URI,
     {
         maxPoolSize: 50,
         wtimeoutMS: 2500,
@@ -52,11 +32,9 @@ MongoClient.connect(
    process.exit(1) 
 })
 .then(async client => {
-    await ProviderDAO.injectDB(client)
-    await CustomerDAO.injectDB(client)
-    
-    
-
+    await FlightsDAO.injectDB(client)
+    await TicketsDAO.injectDB(client)
+    await injectDB(connection)
     app.listen(port, () => {
         console.log(`server listening on port ${port}`)
     })

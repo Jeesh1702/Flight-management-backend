@@ -8,4 +8,6 @@ router.route("/dashboard")
 .put()
 .delete(CustomerController.apiDeleteTicket)
 
+router.route("/search")
+.get(CustomerController.apiSearchFlights)
 export default router
