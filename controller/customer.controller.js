@@ -18,10 +18,13 @@ export default class CustomerController {
             details.cost = flightDetails.price
             ticketList[i] = details
         }
+        const listSD = await FlightsDAO.getSrcDstList()
         let response = {
             customer: custId,
             tickets: ticketList,
-            total_results: totalNumTickets
+            total_results: totalNumTickets,
+            sourceList: listSD.source,
+            destinationList: listSD.destination
         }
         res.json(response)
     }
@@ -99,15 +102,5 @@ export default class CustomerController {
         let noOfTicketsAvailable = Number(details.capacity) - noOfTicketsBooked
         details.noOfTicketsAvailable = noOfTicketsAvailable
         res.json(details)
-    }
-    static async apiGetSrcDstList(req,res,next){
-        try{
-            const response = await FlightsDAO.getSrcDstList()
-            res.json(response)
-        }
-        catch(e){
-            console.error(`error in fetching list of src and dst ${e}`)
-            res.status(500).json({error: e})
-        }
     }
 }
