@@ -10,4 +10,7 @@ router.route("/dashboard")
 
 router.route("/search")
 .get(CustomerController.apiSearchFlights)
+
+router.route("/flightdetails")
+.get(CustomerController.apiGetFlightByID)
 export default router

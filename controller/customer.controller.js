@@ -5,6 +5,19 @@ export default class CustomerController {
     static async apiFetchTickets(req,res,next){
         const custId = (req.query.customerID)
         const {ticketList, totalNumTickets} = await TicketsDAO.getTickets(custId)
+        for(let i=0;i< ticketList.length;i++){
+            let details = {}
+            let flightDetails = await FlightsDAO.getFlightById(ticketList[i].bookings.flightId)
+            details.bookingId = ticketList[i]._id
+            details.date = ticketList[i].bookings.date
+            details.flightId = ticketList[i].bookings.flightId
+            details.noOfTickets = ticketList[i].bookings.noOfTickets
+            details.providerName = flightDetails.providerName
+            details.source = flightDetails.source
+            details.destination = flightDetails.destination
+            details.cost = flightDetails.price
+            ticketList[i] = details
+        }
         let response = {
             customer: custId,
             tickets: ticketList,
@@ -41,6 +54,7 @@ export default class CustomerController {
                 phone: req.body.user.phone
             },
             bookings: {
+                date: req.body.bookings.date,
                 flightId: req.body.bookings.flightId,
                 noOfTickets: req.body.bookings.noOfTickets
             }
@@ -60,9 +74,30 @@ export default class CustomerController {
             res.json({status: "success"})
         }   
         catch(e){
-            console.error(`error deleting flight with id ${flightId} ${e}`)
+            console.error(`error deleting ticket with id ${req.body.ID} ${e}`)
             res.status(500).json({error: e})
         }
     }
 
+    static async apiGetFlightByID(req,res,next){
+        let details
+        let noOfTicketsBooked
+        try{
+            details = await FlightsDAO.getFlightById(req.body.id)
+        }
+        catch(e){
+            console.error(`error fetching flight id ${req.body.ID} ${e}`)
+            res.status(500).json({error: e})
+        }
+        try{
+            noOfTicketsBooked = await TicketsDAO.getTicketCounts(req.body.id,req.body.date)
+        }
+        catch(e){
+            console.error(`error in getting count of tickets ${e}`)
+            res.status(500).json({error: e})
+        }
+        let noOfTicketsAvailable = Number(details.capacity) - noOfTicketsBooked
+        details.noOfTicketsAvailable = noOfTicketsAvailable
+        res.json(details)
+    }
 }

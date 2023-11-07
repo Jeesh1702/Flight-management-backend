@@ -40,5 +40,3 @@ MongoClient.connect(
     })
 })
 
-export default connection;
-

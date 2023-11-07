@@ -38,6 +38,18 @@ export default class FlightsDAO{
         }
     }
 
+    static async getFlightById(id){
+        try{
+            const fid = new ObjectId(id)
+            let flight = await flights.findOne({"_id": fid})
+            return flight
+        }
+        catch(e){
+            console.error("Error",e)
+            return {}
+        }
+    }
+
     static async getFlights(company){
         let query = {"providerName": {$eq: company}}
         let cursor

@@ -17,7 +17,6 @@ export default class ProviderController {
         console.log("Adding flight....")
         const newFlight = {
             providerName: req.body.providerName,
-            flightId: req.body.flightId,
             source: req.body.source,
             destination: req.body.destination,
             day: {

@@ -17,6 +17,10 @@ const customer=new mongoose.Schema({
         },
     },
     bookings:{
+        date:{
+            type:Date,
+            required: true
+        },
         flightId:{
             type:Number,
             required: true

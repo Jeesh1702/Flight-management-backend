@@ -54,4 +54,21 @@ export default class TicketDAO{
             console.error(`error in delete fun ${e}`)
         }
     }
+
+    static async getTicketCounts(flightId,date){
+        let count = 0
+        try{
+            count = await tickets.countDocuments({'bookings.flightId': flightId})
+            let response = await tickets.aggregate( [
+                { $match: { $and: [{'bookings.flightId': flightId},{'bookings.date': date}]} },
+                { $group: { _id: null,sum: { $sum: "$bookings.noOfTickets"}} },
+              ] );
+            count = await response.toArray()
+            count = count[0].sum
+        }
+        catch(e){
+            console.error(e)
+        }
+        return count
+    }
 }
