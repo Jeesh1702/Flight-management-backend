@@ -16,6 +16,18 @@ export default class FlightsDAO{
         }
     }
 
+    static async getSrcDstList(){
+        try{
+            const src = await flights.distinct('source')
+            const dst = await flights.distinct('destination')
+            return {source: src, destination: dst}
+        }
+        catch(e){
+            console.error("error in getting list of sources",e)
+            return {source: [], destination: []}
+        }
+    }
+
     static async getFlightBySearch(data){
         // console.log(data)
         let cursor

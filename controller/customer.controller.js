@@ -100,4 +100,14 @@ export default class CustomerController {
         details.noOfTicketsAvailable = noOfTicketsAvailable
         res.json(details)
     }
+    static async apiGetSrcDstList(req,res,next){
+        try{
+            const response = await FlightsDAO.getSrcDstList()
+            res.json(response)
+        }
+        catch(e){
+            console.error(`error in fetching list of src and dst ${e}`)
+            res.status(500).json({error: e})
+        }
+    }
 }

@@ -14,3 +14,6 @@ router.route("/search")
 router.route("/flightdetails")
 .get(CustomerController.apiGetFlightByID)
 export default router
+
+router.route("/listSrcDst")
+.get(CustomerController.apiGetSrcDstList)
