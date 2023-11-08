@@ -27,7 +27,7 @@ function injectDB(conn){
                     })
                 }
                 else{
-                    console.log("User table already present",results)
+                    console.log("User table already present")
                 }
             })}
         });
@@ -55,7 +55,7 @@ router.route('/CusId').get((req,res)=>{
 
 router.route('/register').post(async(req, res) => {
     console.log("hellow")
-    console.log(req.body)
+    // console.log(req.body)
     let idtemp=100;
      connection.query('select count(*) from user',(err,res)=>{
         console.log("counter of user",res[0]['count(*)'])
@@ -76,7 +76,7 @@ router.route('/register').post(async(req, res) => {
     // if (results.length > 0) {
     //   return res.status(400).json({ message: 'User with this email already exists' });
     // }
-    console.log( results)
+    // console.log( results)
     console.log(idtemp, name, (password), about, type, email)
     connection.query('INSERT INTO user (ID, name, password, about, type, email) VALUES (?, ?, ?, ?, ?, ?)', [idtemp, name, (password), about, type, email], (err) => {
       if (err) {
@@ -93,7 +93,7 @@ router.route('/login').post((req, res) => {
   const { name, password } = req.body;
 
   connection.query('SELECT * FROM user WHERE name = ? AND password = ?', [name, (password)], (error, results) => {
-    console.log(results)
+    // console.log(results)
     if (error) {
       console.error('Error checking login credentials:', error);
 

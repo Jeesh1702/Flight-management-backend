@@ -16,6 +16,18 @@ export default class FlightsDAO{
         }
     }
 
+    static async getSrcDstList(){
+        try{
+            const src = await flights.distinct('source')
+            const dst = await flights.distinct('destination')
+            return {source: src, destination: dst}
+        }
+        catch(e){
+            console.error("error in getting list of sources",e)
+            return {source: [], destination: []}
+        }
+    }
+
     static async getFlightBySearch(data){
         // console.log(data)
         let cursor
@@ -38,11 +50,20 @@ export default class FlightsDAO{
         }
     }
 
-    static async getFlights(company){
-        let query = {}
-        if(company!="x"){
-            query = {"providerName": {$eq: company}}
+    static async getFlightById(id){
+        try{
+            const fid = new ObjectId(id)
+            let flight = await flights.findOne({"_id": fid})
+            return flight
         }
+        catch(e){
+            console.error("Error",e)
+            return {}
+        }
+    }
+
+    static async getFlights(company){
+        let query = {"providerName": {$eq: company}}
         
         let cursor
         try{

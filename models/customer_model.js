@@ -16,17 +16,18 @@ const customer=new mongoose.Schema({
         type: String,
         },
     },
-    bookings:[
-        {
-            flightId:{
-                type:Number,
-                required: true
-            },
-            noOfTickets:{
-                type:Number,
-                required: true
-            }
+    bookings:{
+        date:{
+            type:Date,
+            required: true
+        },
+        flightId:{
+            type:Number,
+            required: true
+        },
+        noOfTickets:{
+            type:Number,
+            required: true
         }
-        
-    ]
+    }
 })

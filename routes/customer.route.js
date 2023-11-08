@@ -9,5 +9,8 @@ router.route("/dashboard")
 .delete(CustomerController.apiDeleteTicket)
 
 router.route("/search")
-.get(CustomerController.apiSearchFlights)
+.post(CustomerController.apiSearchFlights)
+
+router.route("/flightdetails")
+.post(CustomerController.apiGetFlightByID)
 export default router
