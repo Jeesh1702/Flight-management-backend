@@ -29,17 +29,30 @@ export default class CustomerController {
         res.json(response)
     }
     static async apiSearchFlights(req,res,next){
+        console.log(req.body.date)
+        
+
+        var weekday=new Array(7);
+        weekday[1]="mon";
+        weekday[2]="tue";
+        weekday[3]="wed";
+        weekday[4]="thur";
+        weekday[5]="fri";
+        weekday[6]="sat";
+        weekday[0]="sun";
+        day=weekday[req.body.day]
+        console.log(day)
         let data = {
             "providerName" : (!("providerName" in req.body))? {$exists: true} : {$eq: req.body.providerName},
             "source": {$eq: req.body.source},
-            "destination": {$eq: req.body.destination},
-            "day.mon": (req.body.day !== 'mon')? {$exists: true} : {$ne: null},
-            "day.tue": (req.body.day !== 'tue')? {$exists: true} : {$ne: null},
-            "day.wed": (req.body.day !== 'wed')? {$exists: true} : {$ne: null},
-            "day.thur": (req.body.day !== 'thur')? {$exists: true} : {$ne: null},
-            "day.fri": (req.body.day !== 'fri')? {$exists: true} : {$ne: null},
-            "day.sat": (req.body.day !== 'sat')? {$exists: true} : {$ne: null},
-            "day.sun": (req.body.day !== 'sun')? {$exists: true} : {$ne: null},
+            "destination": (!("destination" in req.body))? {$exists: true} : {$eq: req.body.destination} ,
+            "day.mon": (day !== 'mon')? {$exists: true} : {$ne: null},
+            "day.tue": (day !== 'tue')? {$exists: true} : {$ne: null},
+            "day.wed": (day !== 'wed')? {$exists: true} : {$ne: null},
+            "day.thur": (day !== 'thur')? {$exists: true} : {$ne: null},
+            "day.fri": (day !== 'fri')? {$exists: true} : {$ne: null},
+            "day.sat": (day !== 'sat')? {$exists: true} : {$ne: null},
+            "day.sun": (day !== 'sun')? {$exists: true} : {$ne: null},
         }
         const {flightList, totalNumFlights} = await FlightsDAO.getFlightBySearch(data)
         let response = {
@@ -49,6 +62,7 @@ export default class CustomerController {
         res.json(response)
     } 
     static async apiAddTicket(req,res,next){
+        console.log(req.body)
         const newTicket = {
             user: {
                 custId: req.query.customerID,
@@ -94,12 +108,14 @@ export default class CustomerController {
         }
         try{
             noOfTicketsBooked = await TicketsDAO.getTicketCounts(req.body.id,req.body.date)
+            console.log(noOfTicketsBooked)
         }
         catch(e){
             console.error(`error in getting count of tickets ${e}`)
             res.status(500).json({error: e})
         }
-        let noOfTicketsAvailable = Number(details.capacity) - noOfTicketsBooked
+        let noOfTicketsAvailable = Number(details.capacity) - Number(noOfTicketsBooked)
+        
         details.noOfTicketsAvailable = noOfTicketsAvailable
         res.json(details)
     }

@@ -64,7 +64,12 @@ export default class TicketDAO{
                 { $group: { _id: null,sum: { $sum: "$bookings.noOfTickets"}} },
               ] );
             count = await response.toArray()
-            count = count[0].sum
+            if(count.length === 0){
+                count = 0
+            }
+            else{
+                count = count[0].sum
+            }
         }
         catch(e){
             console.error(e)
