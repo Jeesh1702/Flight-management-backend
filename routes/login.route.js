@@ -1,4 +1,7 @@
 import express from "express"
+
+import { sendMessage } from "../fire.js";
+
 // import md5 from "md5"
 const router = express.Router();
 
@@ -91,7 +94,6 @@ router.route('/register').post(async(req, res) => {
 
 router.route('/login').post((req, res) => {
   const { name, password } = req.body;
-
   connection.query('SELECT * FROM user WHERE name = ? AND password = ?', [name, (password)], (error, results) => {
     // console.log(results)
     if (error) {
@@ -108,6 +110,7 @@ router.route('/login').post((req, res) => {
     
     //res.body.id=results[0].ID
     res.status(200).json({ message: 'Login successful', user });
+    sendMessage(name)
   });
 });
 

@@ -40,7 +40,7 @@ export default class CustomerController {
         weekday[5]="fri";
         weekday[6]="sat";
         weekday[0]="sun";
-        day=weekday[req.body.day]
+        let day=weekday[req.body.day]
         console.log(day)
         let data = {
             "providerName" : (!("providerName" in req.body))? {$exists: true} : {$eq: req.body.providerName},
