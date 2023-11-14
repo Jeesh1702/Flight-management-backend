@@ -76,4 +76,54 @@ export default class TicketDAO{
         }
         return count
     }
+
+    static async getSeats(flightId,date){
+        //let tickets = []
+        console.log(typeof(flightId),typeof(date),"yo")
+        try{
+            const result = await tickets.aggregate([
+                {
+                    $match: {
+                        $and: [{ 'bookings.flightId': flightId }, { 'bookings.date': date }]
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        combinedTicketList: { $addToSet: '$bookings.ticketList' }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        combinedTicketList: 1
+                    }
+                }
+            ]).toArray();
+
+            if (result.length > 0 && result[0].combinedTicketList) {
+                console.log(result[0].combinedTicketList.flat());
+                return result[0].combinedTicketList.flat();
+            } else {
+                console.log("No matching records found");
+                return [0];
+            }
+            // count = await tickets.countDocuments({'bookings.flightId': flightId})
+            // let response = await tickets.aggregate( [
+            //     { $match: { $and: [{'bookings.flightId': flightId},{'bookings.date': date}]} },
+            //     { $group: { _id: null,sum: { $sum: "$bookings.noOfTickets"}} },
+            //   ] );
+            // count = await response.toArray()
+            // if(count.length === 0){
+            //     count = 0
+            // }
+            // else{
+            //     count = count[0].sum
+            // }
+        }
+        catch(e){
+            console.error(e)
+        }
+        //return tickets
+    }
 }

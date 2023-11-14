@@ -8,7 +8,7 @@ export default class FlightsDAO{
             return
         }
         try{
-            flights = await conn.db(process.env.MONGO_DB).collection("schedule")
+            flights = await conn.db(process.env.MONGO_DB).collection("schedule") //flights
             console.log("Connected to DB")
         }
         catch(e){
@@ -57,7 +57,8 @@ export default class FlightsDAO{
             return flight
         }
         catch(e){
-            console.error("Error",e)
+
+            console.error("Error in getFlightById",e)
             return {}
         }
     }

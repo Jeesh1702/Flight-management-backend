@@ -17,7 +17,7 @@ const connection = mysql2.createConnection({
 
 const MongoClient = mongodb.MongoClient
 
-const port = process.env.MONGO_PORT || 8000
+const port = process.env.MONGO_PORT || 5000
 MongoClient.connect(
     process.env.MONGO_DB_URI,
     {

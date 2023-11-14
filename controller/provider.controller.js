@@ -41,10 +41,6 @@ export default class ProviderController {
         }
     }
 
-    static async apiUpdateFlight(req,res,next){
-        
-    }
-
     static async apiDeleteFlight(req,res,next){
         console.log("deleting flight")
         try{

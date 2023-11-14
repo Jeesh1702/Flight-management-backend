@@ -71,14 +71,14 @@ router.route('/register').post(async(req, res) => {
   const { name, password, about, type, email } = req.body;
      connection.query('SELECT * FROM user WHERE email = ?', [email], (error, results) => {
       
-    // if (error) {
-    //   console.error('Error checking for existing user:', error);
-    //   return res.status(500).json({ message: 'Internal server error' });
-    // }
+    if (error) {
+      console.error('Error checking for existing user:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
 
-    // if (results.length > 0) {
-    //   return res.status(400).json({ message: 'User with this email already exists' });
-    // }
+    if (results.length > 0) {
+      return res.status(400).json({ message: 'User with this email already exists' });
+    }
     // console.log( results)
     console.log(idtemp, name, (password), about, type, email)
     connection.query('INSERT INTO user (ID, name, password, about, type, email) VALUES (?, ?, ?, ?, ?, ?)', [idtemp, name, (password), about, type, email], (err) => {
@@ -102,8 +102,8 @@ router.route('/login').post((req, res) => {
       return res.status(500).json({ message: 'Internal server error' });
     }
 
-    if (results.length === 0) {
-      return res.status(401).json({ message: 'Invalid user or password' });
+    if (results.length == 0) {
+      return res.status(200).json({ message: 'Invalid' });
     }
 
     const user = results[0];

@@ -28,6 +28,7 @@ const customer=new mongoose.Schema({
         noOfTickets:{
             type:Number,
             required: true
-        }
+        },
+        ticketList:[Number]
     }
 })

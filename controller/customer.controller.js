@@ -2,6 +2,12 @@ import TicketsDAO from "../dao/ticketsDAO.js"
 import FlightsDAO from "../dao/flightsDAO.js"
 
 export default class CustomerController {
+
+    static async getFlightSelection(req,res){
+        const flightId=req.query.flightID
+        
+    }
+
     static async apiFetchTickets(req,res,next){
         const custId = (req.query.customerID)
         const {ticketList, totalNumTickets} = await TicketsDAO.getTickets(custId)
@@ -73,7 +79,8 @@ export default class CustomerController {
             bookings: {
                 date: req.body.bookings.date,
                 flightId: req.body.bookings.flightId,
-                noOfTickets: req.body.bookings.noOfTickets
+                noOfTickets: req.body.bookings.noOfTickets,
+                ticketList:req.body.bookings.ticketList
             }
         }
         try{
@@ -99,13 +106,17 @@ export default class CustomerController {
     static async apiGetFlightByID(req,res,next){
         let details
         let noOfTicketsBooked
+        let TicketsBooked
+        console.log("hello",req.body)
         try{
             details = await FlightsDAO.getFlightById(req.body.id)
+            console.log(details)
         }
         catch(e){
-            console.error(`error fetching flight id ${req.body.ID} ${e}`)
+            console.error(`error fetching flight id ${req.body.id} ${e}`)
             res.status(500).json({error: e})
         }
+
         try{
             noOfTicketsBooked = await TicketsDAO.getTicketCounts(req.body.id,req.body.date)
             console.log(noOfTicketsBooked)
@@ -114,9 +125,20 @@ export default class CustomerController {
             console.error(`error in getting count of tickets ${e}`)
             res.status(500).json({error: e})
         }
+
+        try{
+            TicketsBooked = await TicketsDAO.getSeats(req.body.id,req.body.date)
+            console.log(TicketsBooked)
+        }
+        catch(e){
+            console.error(`error in getting tickets ${e}`)
+            res.status(500).json({error: e})
+        }
+
         let noOfTicketsAvailable = Number(details.capacity) - Number(noOfTicketsBooked)
         
         details.noOfTicketsAvailable = noOfTicketsAvailable
+        details.tickets = TicketsBooked
         res.json(details)
     }
 }
