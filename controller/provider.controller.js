@@ -29,7 +29,8 @@ export default class ProviderController {
                 sun: req.body.day.sun,
             },
             capacity: req.body.capacity,
-            price: req.body.price
+            price: req.body.price,
+            reviews: []
         }
         try{
             const response = await FlightsDAO.addFlights(newFlight)

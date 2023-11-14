@@ -20,3 +20,6 @@ router.route("flightgui")
 // .post(CustomerController.saveFlightSelection)
 
 export default router
+
+router.route("/review")
+.post(CustomerController.apiAddReview)

@@ -29,6 +29,14 @@ const customer=new mongoose.Schema({
             type:Number,
             required: true
         },
-        ticketList:[Number]
+        ticketList:[Number],
+        
+        noOfChildren:{
+            type:Number,
+        },
+        totalCost:{
+            type:Number,
+            required: true
+        }
     }
 })

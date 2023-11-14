@@ -2,6 +2,6 @@ MONGO_DB_URI = mongodb://127.0.0.1:27017/airports?readPreference=primary&ssl=fal
 MONGO_PORT = 5000
 MONGO_DB = airports
 
-SQL_USER = root
-SQL_PASS = Hello@123
+SQL_USER = username
+SQL_PASS = password
 SQL_DB = airports
