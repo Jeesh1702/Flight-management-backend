@@ -1,13 +1,16 @@
 import TicketsDAO from "../dao/ticketsDAO.js"
 import FlightsDAO from "../dao/flightsDAO.js"
+import { response } from "express"
 
 export default class CustomerController {
     static async apiFetchTickets(req,res,next){
         const custId = (req.query.customerID)
         const {ticketList, totalNumTickets} = await TicketsDAO.getTickets(custId)
         for(let i=0;i< ticketList.length;i++){
+            // console.log(ticketList[i])
             let details = {}
             let flightDetails = await FlightsDAO.getFlightById(ticketList[i].bookings.flightId)
+            console.log(flightDetails)
             details.bookingId = ticketList[i]._id
             details.date = ticketList[i].bookings.date
             details.flightId = ticketList[i].bookings.flightId
@@ -15,7 +18,8 @@ export default class CustomerController {
             details.providerName = flightDetails.providerName
             details.source = flightDetails.source
             details.destination = flightDetails.destination
-            details.cost = flightDetails.price
+            details.cost = ticketList[i].bookings.totalCost
+            details.noOfChildren = ticketList[i].bookings.noOfChildren
             ticketList[i] = details
         }
         const listSD = await FlightsDAO.getSrcDstList()
@@ -26,12 +30,11 @@ export default class CustomerController {
             sourceList: listSD.source,
             destinationList: listSD.destination
         }
+        // console.log(response)
         res.json(response)
     }
     static async apiSearchFlights(req,res,next){
         console.log(req.body.date)
-        
-
         var weekday=new Array(7);
         weekday[1]="mon";
         weekday[2]="tue";
@@ -55,6 +58,7 @@ export default class CustomerController {
             "day.sun": (day !== 'sun')? {$exists: true} : {$ne: null},
         }
         const {flightList, totalNumFlights} = await FlightsDAO.getFlightBySearch(data)
+        console.log(flightList)
         let response = {
             flights: flightList,
             total_results: totalNumFlights
@@ -73,7 +77,9 @@ export default class CustomerController {
             bookings: {
                 date: req.body.bookings.date,
                 flightId: req.body.bookings.flightId,
-                noOfTickets: req.body.bookings.noOfTickets
+                noOfTickets: req.body.bookings.noOfTickets,
+                noOfChildren: req.body.bookings.noOfChild,
+                totalCost: req.body.bookings.totalCost
             }
         }
         try{
@@ -118,5 +124,18 @@ export default class CustomerController {
         
         details.noOfTicketsAvailable = noOfTicketsAvailable
         res.json(details)
+    }
+
+    static async apiAddReview(req,res,next){
+        // console.log(req.body)
+        try{
+            let response = await FlightsDAO.addReview(req.body.flightId,req.body.custId,req.body.rating,req.body.content)
+            // console.log(response)
+            res.json(response)
+        }
+        catch(e){
+            console.error(`error in adding review ${e}`)
+            res.status(500).json({error: e})
+        }
     }
 }

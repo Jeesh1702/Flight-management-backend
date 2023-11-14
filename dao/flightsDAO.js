@@ -104,4 +104,21 @@ export default class FlightsDAO{
             console.error(`error in delete fun ${e}`)
         }
     }
+
+    static async addReview(flightId,custId,rating,content){
+        try{
+            const fid = new ObjectId(flightId)
+            let newReview = {
+                flightId: flightId,
+                custId: custId,
+                rating: rating,
+                content: content
+            }
+            let response = await flights.findOneAndUpdate({_id: fid},{'$push': {'reviews': newReview}})
+            return response
+        }
+        catch(e){
+            return(e)
+        }
+    }
 }

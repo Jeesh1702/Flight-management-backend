@@ -48,6 +48,9 @@ const scheduleSchema= new mongoose.Schema({
     },
     price:{
         type:Number
+    },
+    reviews: {
+        type: Array(Object)
     }
 })
 

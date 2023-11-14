@@ -28,6 +28,13 @@ const customer=new mongoose.Schema({
         noOfTickets:{
             type:Number,
             required: true
+        },
+        noOfChildren:{
+            type:Number,
+        },
+        totalCost:{
+            type:Number,
+            required: true
         }
     }
 })

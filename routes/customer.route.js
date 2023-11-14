@@ -14,3 +14,6 @@ router.route("/search")
 router.route("/flightdetails")
 .post(CustomerController.apiGetFlightByID)
 export default router
+
+router.route("/review")
+.post(CustomerController.apiAddReview)
