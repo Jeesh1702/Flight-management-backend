@@ -2,7 +2,7 @@ import express from "express"
 
 import { sendMessage } from "../fire.js";
 
-// import md5 from "md5"
+import md5 from "md5"
 const router = express.Router();
 
 let connection
@@ -20,7 +20,7 @@ function injectDB(conn){
               console.log('Connected to MySQL');
               connection.query("select * from user",(error,results) => {
                 if(error){
-                    connection.query("CREATE TABLE user(ID varchar(20) not null,name varchar(30) not null,password varchar(30) not null,about varchar(100),type varchar(15), email varchar(30));",(error,results) => {
+                    connection.query("CREATE TABLE user(ID varchar(20) not null,name varchar(30) not null,password varchar(100) not null,about varchar(100),type varchar(15), email varchar(30));",(error,results) => {
                         if(error){
                             console.log("Error in creating table user")
                         }
@@ -81,20 +81,20 @@ router.route('/register').post(async(req, res) => {
     // }
     // console.log( results)
     console.log(idtemp, name, (password), about, type, email)
-    connection.query('INSERT INTO user (ID, name, password, about, type, email) VALUES (?, ?, ?, ?, ?, ?)', [idtemp, name, (password), about, type, email], (err) => {
+    connection.query('INSERT INTO user (ID, name, password, about, type, email) VALUES (?, ?, ?, ?, ?, ?)', [idtemp, name, md5(password), about, type, email], (err) => {
       if (err) {
         console.error('Error registering user:', err);
         return res.status(500).json({ message: 'Internal server error' });
       }
-
       res.status(201).json({ message: 'User registered successfully' });
+      sendMessage(name)
     });
   });
 }); 
 
 router.route('/login').post((req, res) => {
   const { name, password } = req.body;
-  connection.query('SELECT * FROM user WHERE name = ? AND password = ?', [name, (password)], (error, results) => {
+  connection.query('SELECT * FROM user WHERE name = ? AND password = ?', [name, md5(password)], (error, results) => {
     // console.log(results)
     if (error) {
       console.error('Error checking login credentials:', error);
