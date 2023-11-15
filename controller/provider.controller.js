@@ -29,7 +29,8 @@ export default class ProviderController {
                 sun: req.body.day.sun,
             },
             capacity: req.body.capacity,
-            price: req.body.price
+            price: req.body.price,
+            reviews: []
         }
         try{
             const response = await FlightsDAO.addFlights(newFlight)
@@ -39,10 +40,6 @@ export default class ProviderController {
         catch(e){
             res.status(500).json({error: e})
         }
-    }
-
-    static async apiUpdateFlight(req,res,next){
-        
     }
 
     static async apiDeleteFlight(req,res,next){

@@ -8,7 +8,7 @@ export default class FlightsDAO{
             return
         }
         try{
-            flights = await conn.db(process.env.MONGO_DB).collection("schedule")
+            flights = await conn.db(process.env.MONGO_DB).collection("schedule") //flights
             console.log("Connected to DB")
         }
         catch(e){
@@ -57,7 +57,8 @@ export default class FlightsDAO{
             return flight
         }
         catch(e){
-            console.error("Error",e)
+
+            console.error("Error in getFlightById",e)
             return {}
         }
     }
@@ -102,6 +103,23 @@ export default class FlightsDAO{
         }
         catch(e){
             console.error(`error in delete fun ${e}`)
+        }
+    }
+
+    static async addReview(flightId,custId,rating,content){
+        try{
+            const fid = new ObjectId(flightId)
+            let newReview = {
+                flightId: flightId,
+                custId: custId,
+                rating: rating,
+                content: content
+            }
+            let response = await flights.findOneAndUpdate({_id: fid},{'$push': {'reviews': newReview}})
+            return response
+        }
+        catch(e){
+            return(e)
         }
     }
 }
